@@ -1,0 +1,129 @@
+@font-face {
+  font-family: Bryant;
+  src: url("font/BryantPro-Regular.otf");
+}
+
+@font-face {
+  font-family: BryantBold;
+  src: url("font/BryantPro-Bold.otf");
+}
+
+html, body {
+  margin: 0;
+/*   padding: 0 background-color: red; */
+  font-family: Bryant;
+}
+
+canvas {
+  display: block;
+}
+
+#details-parent {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#game-details {
+  position: absolute;
+  top: 10%;
+  /* left: 50%;
+  top: 50%; */
+  text-align: center;
+}
+
+#choose-dog {
+  position: absolute;
+  top: 10%;
+  text-align: center;
+}
+
+#title {
+  width: 2160px;
+  height: 984px;
+}
+
+h1 {
+  font-family: BryantBold;
+  font-size: 56px;
+  font-weight: 700;
+  color: white;
+}
+
+p {
+  font-size: 48px;
+  font-weight: 600;
+  color: white;
+}
+
+#begin-btn {
+  padding: 24px 96px 16px;
+  background: #FF5959;
+  border-radius: 80px;
+  border: none;
+  font-size: 80px;
+  color: white;
+  font-family: BryantBold;
+  width: 800px;
+  height: 160px;
+}
+
+#choose-dog {
+  display: none;
+  flex-direction: row;
+  background-color: #FFFFFF;
+  border-radius: 100px;
+  width: 80%;
+  padding-top: 40px;
+}
+
+#choose-dog h1 {
+  color: #FF5959;
+  font-size: 88px;
+}
+
+#dogs {
+  display: flex;
+  margin-top: 160px;
+  padding-bottom: 160px;
+}
+
+#dogs p {
+  color: black;
+  font-size: 40px;
+  margin-top: 16px;
+}
+
+.dog-container img {
+  width: 60%;
+}
+
+#bees-tooltip {
+  position: absolute;
+  display: none;
+  color: black;
+  background-color: white;
+  margin-top: 40px;
+  margin-left: 40px;
+  width: 20%;
+  padding: 24px;
+  border-radius: 24px;
+}
+
+#bees-tooltip h2 {
+  font-family: BryantBold;
+  font-size: 32px;
+  margin-bottom: 8px;
+  margin-top: 16px;
+  color: #FF5959;
+}
+
+#bees-tooltip p {
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 32px;
+  color: black;
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
