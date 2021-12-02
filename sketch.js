@@ -13,15 +13,18 @@ let chosen_dog = Math.floor(Math.random() * 3) + 1;
 let flowers;
 let pond;
 
-// Bees vars
-let boids = [];
 let bee;
+let bee_x;
+let bee_y;
+
+let beat_bees = false;
 
 function preload() {
   // dog = loadImage("assets/dog" + chosen_dog + ".gif");
   dog = loadImage("assets/dog1.gif");
+  dog_wet = loadImage("assets/dog_wet.png");
   background_img = loadImage('assets/backyard.png');
-  bee = loadImage("assets/bee.png");
+  bee = loadImage("assets/bees.gif");
   flowers = loadImage("assets/flowers.png");
   pond = loadImage("assets/pond.png");
 }
@@ -34,178 +37,30 @@ function setup() {
   // PoseNet setup
   video=createCapture(VIDEO);
   video.hide();
+  video.size(windowWidth, windowHeight);
+
   poseNet = ml5.poseNet(video, modelLoaded);
   poseNet.on('pose', gotPoses);
+
+  dog_current = dog; 
   
-  // Add dog image
+  // Add dog gif
   image(dog, 0, 0, 300, 300);
   dog_x = 50;
   dog_y = 50;
-  
-  // Add an initial set of bees into the system
-  for (let i = 0; i < 20; i++) {
-    boids[i] = new Boid(random(width), random(height));
-  }
-  
-}
 
-// Bee class
-// Methods for Separation, Cohesion, Alignment added
-class Boid {
-  constructor(x, y) {
-    this.acceleration = createVector(0, 0);
-    this.velocity = p5.Vector.random2D();
-    this.position = createVector(x, y);
-    this.r = 3.0;
-    this.maxspeed = 3;    // Maximum speed
-    this.maxforce = 0.05; // Maximum steering force
-  }
+  // Add dog_wet
+  image(dog_wet, 0, 0, 300, 300);
+  // tint(0, 0, 0, 0);
+  dog_wet_x = 50;
+  dog_wet_y = 50;
 
-  run(boids) {
-    this.flock(boids);
-    this.update();
-    this.borders();
-    this.render();
-  }
-  
-  // Forces go into acceleration
-  applyForce(force) {
-    this.acceleration.add(force);
-  }
-  
-  // We accumulate a new acceleration each time based on three rules
-  flock(boids) {
-    let sep = this.separate(boids); // Separation
-    let ali = this.align(boids);    // Alignment
-    let coh = this.cohesion(boids); // Cohesion
-    // Arbitrarily weight these forces
-    sep.mult(2.5);
-    ali.mult(1.0);
-    coh.mult(1.0);
-    // Add the force vectors to acceleration
-    this.applyForce(sep);
-    this.applyForce(ali);
-    this.applyForce(coh);
-  }
-  
-  // Method to update location
-  update() {
-    // Update velocity
-    this.velocity.add(this.acceleration);
-    // Limit speed
-    this.velocity.limit(this.maxspeed);
-    this.position.add(this.velocity);
-    // Reset acceleration to 0 each cycle
-    this.acceleration.mult(0);
-  }
-  
-  // A method that calculates and applies a steering force towards a target
-  // STEER = DESIRED MINUS VELOCITY
-  seek(target) {
-    let desired = p5.Vector.sub(target, this.position);
-    desired.normalize();
-    desired.mult(this.maxspeed);
-    let steer = p5.Vector.sub(desired, this.velocity);
-    steer.limit(this.maxforce); // Limit to maximum steering force
-    return steer;
-  }
-  
-  // Draw bee
-  render() {
-    image(bee, this.position.x, this.position.y, 90, 90);
-  }
+  // Add bee image
+  image(bee, 0, 0, 100, 100);
+  bee_x = 50;
+  bee_y = 50;
 
-  print_pos() {
-    // console.log(this.position.x);
-    if (this.position.x <= 50 && this.position.y <= 50) {
-      console.log("hello");
-    }
-  }
   
-  borders() {
-    if (this.position.x < -this.r) this.position.x = width + this.r;
-    if (this.position.y < -this.r) this.position.y = height + this.r;
-    if (this.position.x > width + this.r) this.position.x = -this.r;
-    if (this.position.y > height + this.r) this.position.y = -this.r;
-  }
-  
-  // Separation
-  // Method checks for nearby boids and steers away
-  separate(boids) {
-    let desiredseparation = 25.0;
-    let steer = createVector(0, 0);
-    let count = 0;
-    // For every boid in the system, check if it's too close
-    for (let i = 0; i < boids.length; i++) {
-      let d = p5.Vector.dist(this.position, boids[i].position);
-      if ((d > 0) && (d < desiredseparation)) {
-        // Calculate vector pointing away from neighbor
-        let diff = p5.Vector.sub(this.position, boids[i].position);
-        diff.normalize();
-        diff.div(d); // Weight by distance
-        steer.add(diff);
-        count++; // Keep track of how many
-      }
-    }
-    // Average -- divide by how many
-    if (count > 0) {
-      steer.div(count);
-    }
-  
-    // As long as the vector is greater than 0
-    if (steer.mag() > 0) {
-      steer.normalize();
-      steer.mult(this.maxspeed);
-      steer.sub(this.velocity);
-      steer.limit(this.maxforce);
-    }
-    return steer;
-  }
-  
-  // Alignment
-  // For every nearby boid in the system, calculate the average velocity
-  align(boids) {
-    let neighbordist = 50;
-    let sum = createVector(0, 0);
-    let count = 0;
-    for (let i = 0; i < boids.length; i++) {
-      let d = p5.Vector.dist(this.position, boids[i].position);
-      if ((d > 0) && (d < neighbordist)) {
-        sum.add(boids[i].velocity);
-        count++;
-      }
-    }
-    if (count > 0) {
-      sum.div(count);
-      sum.normalize();
-      sum.mult(this.maxspeed);
-      let steer = p5.Vector.sub(sum, this.velocity);
-      steer.limit(this.maxforce);
-      return steer;
-    } else {
-      return createVector(0, 0);
-    }
-  }
-  
-  // Cohesion
-  cohesion(boids) {
-    let neighbordist = 50;
-    let sum = createVector(0, 0);
-    let count = 0;
-    for (let i = 0; i < boids.length; i++) {
-      let d = p5.Vector.dist(this.position, boids[i].position);
-      if ((d > 0) && (d < neighbordist)) {
-        sum.add(boids[i].position); // Add location
-        count++;
-      }
-    }
-    if (count > 0) {
-      sum.div(count);
-      return this.seek(sum); // Steer towards the location
-    } else {
-      return createVector(0, 0);
-    }
-  }  
 }
 
 function gotPoses(poses) {
@@ -221,34 +76,55 @@ function modelLoaded() {
 
 function draw() {
   background(background_img);
-  //image(video,0,0);
+  //image(video, 0, 0, windowWidth, windowHeight);
   
-  // x, y, width,
-  image(flowers, 200, 200, 500, 500);
+  // x, y, width, height
+  image(flowers, 100, 100, 1200, 1200);
   image(pond, 900, 600, 500, 500);
   image(dog, dog_x, dog_y, 300, 300);
+  tint(255, 0);
+  image(dog_wet, dog_wet_x, dog_wet_y, 300, 300);
+  image(bee, bee_x, bee_y, 200, 200);
+  tint(255, 255);
   
   if(pose) {
     
     // Hide game info on left wrist position
-    if (pose.leftWrist.x >= 200 && pose.leftWrist.y >= 200) {
+    // if (pose.leftWrist.x >= 1200 && pose.leftWrist.x >= 2000 && 
+    //   pose.leftWrist.y >= 1300 && pose.leftWrist.y >= 1520) {
+    //   var game_info = document.getElementById("game-details");
+    //   game_info.style.display = "none";
+    // }
+
+    if (mouseX >= 1200 && mouseX <= 2000 && 
+      mouseY >= 1300 && mouseY <= 1520) {
       var game_info = document.getElementById("game-details");
       game_info.style.display = "none";
     }
 
-    // Tickle the dog depending on right wrist
-    if (pose.rightWrist.x >= dog_x && pose.rightWrist.y <= dog_x + 300 &&
-       pose.rightWrist.y >= dog_y && pose.rightWrist.y <= dog_y + 300
-    ) {
-      dog_x += random(-10, 10);
-      dog_y += random(-10, 10);
-    }
+    // if(pose.rightWrist.x - pose.leftWrist.x <= 10 && pose.rightWrist.y - pose.leftWrist.y <= 10) {
+    //   dog_x = pose.nose.x - 150;
+    //   dog_y = pose.nose.y - 150;
+    //   dog_wet_x = pose.nose.x - 150;
+    //   dog_wet_y = pose.nose.y - 150;
+    // }
+
+    // testing with mouse
+    dog_x = mouseX - 150;
+    dog_y = mouseY - 150;
+    dog_wet_x = mouseX - 150;
+    dog_wet_y = mouseY - 150;
 
     // Show bees if dog hits a certain coordinate
-    if (dog_x >= 200 && dog_x <= 650 && dog_y >= 300 && dog_y <= 700) {
-      for (let i = 0; i < boids.length; i++) {
-        boids[i].run(boids);
-      }
+    if (dog_x >= 200 && dog_x <= 1000 && dog_y >= 300 && dog_y <= 1000) {
+      image(bee, bee_x, bee_y, 200, 200);
+
+      // bee_x = pose.nose.x - 200;
+      // bee_y = pose.nose.y - 150;
+
+      bee_x = mouseX - 200;
+      bee_y = mouseY - 150;
+
       document.getElementById("bees-tooltip").style.display = "block";
     }
     
@@ -259,6 +135,14 @@ function draw() {
       strokeWeight(2);
       stroke(255);
       line(a.position.x, a.position.y,b.position.x,b.position.y);      
+    }
+
+    // Display Pose Points
+    for (let i = 0; i < pose.keypoints.length; i++) {
+      let x = pose.keypoints[i].position.x;
+      let y = pose.keypoints[i].position.y;
+      fill(255,255,255);
+      ellipse(x,y,10,10);
     }
     
   }
