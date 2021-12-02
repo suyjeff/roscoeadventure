@@ -39,8 +39,8 @@ canvas {
 }
 
 #title {
-  width: 2160px;
-  height: 984px;
+  width: 75%;
+  height: auto;
 }
 
 h1 {
@@ -64,8 +64,8 @@ p {
   font-size: 80px;
   color: white;
   font-family: BryantBold;
-  width: 800px;
-  height: 160px;
+  width: 30%;
+  height: 20%;
 }
 
 #choose-dog {

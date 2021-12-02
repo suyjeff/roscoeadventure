@@ -10,8 +10,13 @@ let dog_y;
 
 let chosen_dog = Math.floor(Math.random() * 3) + 1;
 
+let bone1; 
+let bone2; 
+let bone3;
+
 let flowers;
 let pond;
+let doghouse;
 
 let bee;
 let bee_x;
@@ -25,8 +30,12 @@ function preload() {
   dog_wet = loadImage("assets/dog_wet.png");
   background_img = loadImage('assets/backyard.png');
   bee = loadImage("assets/bees.gif");
+  bone1= loadImage("assets/bone.png")
+  bone2= loadImage("assets/bone.png")
+  bone3= loadImage("assets/bone.png")
   flowers = loadImage("assets/flowers.png");
   pond = loadImage("assets/pond.png");
+  doghouse = loadImage("assets/enemydoghouse.png")
 }
 
 function setup() {
@@ -45,7 +54,7 @@ function setup() {
   dog_current = dog; 
   
   // Add dog gif
-  image(dog, 0, 0, 300, 300);
+  image(dog, 0, 0, 500, 500);
   dog_x = 50;
   dog_y = 50;
 
@@ -79,9 +88,13 @@ function draw() {
   //image(video, 0, 0, windowWidth, windowHeight);
   
   // x, y, width, height
+  image(bone1, 400, 400, 300, 300);
   image(flowers, 100, 100, 1200, 1200);
-  image(pond, 900, 600, 500, 500);
+  image(pond, 1500, 600, 1200, 1200);
   image(dog, dog_x, dog_y, 300, 300);
+  image(doghouse, 3000, 100, 1200, 1200);
+
+
   tint(255, 0);
   image(dog_wet, dog_wet_x, dog_wet_y, 300, 300);
   image(bee, bee_x, bee_y, 200, 200);
