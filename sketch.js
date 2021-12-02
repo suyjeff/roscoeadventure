@@ -3,16 +3,17 @@ let poseNet;
 let pose;
 let skeleton;
 
+
+let bone1; 
+let bone2; 
+let bone3;
+
 let dog;
 let background_img;
 let dog_x;
 let dog_y;
 
 let chosen_dog = Math.floor(Math.random() * 3) + 1;
-
-let bone1; 
-let bone2; 
-let bone3;
 
 let flowers;
 let pond;
@@ -26,13 +27,13 @@ let beat_bees = false;
 
 function preload() {
   // dog = loadImage("assets/dog" + chosen_dog + ".gif");
+  bone1= loadImage("assets/bone.png")
+  bone2= loadImage("assets/bone.png")
+  bone3= loadImage("assets/bone.png")
   dog = loadImage("assets/dog1.gif");
   dog_wet = loadImage("assets/dog_wet.png");
   background_img = loadImage('assets/backyard.png');
   bee = loadImage("assets/bees.gif");
-  bone1= loadImage("assets/bone.png")
-  bone2= loadImage("assets/bone.png")
-  bone3= loadImage("assets/bone.png")
   flowers = loadImage("assets/flowers.png");
   pond = loadImage("assets/pond.png");
   doghouse = loadImage("assets/enemydoghouse.png")
@@ -88,10 +89,11 @@ function draw() {
   //image(video, 0, 0, windowWidth, windowHeight);
   
   // x, y, width, height
-  image(bone1, 400, 400, 300, 300);
+  image(bone1, 800, 400, 200, 200);
+  image(bone2, 800, 900, 100, 100);
   image(flowers, 100, 100, 1200, 1200);
   image(pond, 1500, 600, 1200, 1200);
-  image(dog, dog_x, dog_y, 300, 300);
+  image(dog, dog_x, dog_y, 600, 600);
   image(doghouse, 3000, 100, 1200, 1200);
 
 

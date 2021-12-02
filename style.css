@@ -127,6 +127,64 @@ p {
   margin-bottom: 8px;
 }
 
+/* #pond-tooltip {
+  position: absolute;
+  display: none;
+  color: black;
+  background-color: white;
+  margin-top: 40px;
+  margin-left: 40px;
+  width: 20%;
+  padding: 24px;
+  border-radius: 24px;
+}
+
+#pond-tooltip h2 {
+  font-family: BryantBold;
+  font-size: 32px;
+  margin-bottom: 8px;
+  margin-top: 16px;
+  color: #FF5959;
+}
+
+#pond-tooltip p {
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 32px;
+  color: black;
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+#doghouse-tooltip {
+  position: absolute;
+  display: none;
+  color: black;
+  background-color: white;
+  margin-top: 40px;
+  margin-left: 40px;
+  width: 20%;
+  padding: 24px;
+  border-radius: 24px;
+}
+
+#doghouse-tooltip h2 {
+  font-family: BryantBold;
+  font-size: 32px;
+  margin-bottom: 8px;
+  margin-top: 16px;
+  color: #FF5959;
+}
+
+#doghouse-tooltip p {
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 32px;
+  color: black;
+  margin-top: 8px;
+  margin-bottom: 8px;
+} */
+
 #success-bones {
   position: relative;
   top:0;
