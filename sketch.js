@@ -23,6 +23,8 @@ let active_bees = false;
 let beat_pond = false;
 let beat_doghouse = false;
 
+let success_count = 0;
+
 function preload() {
   // dog = loadImage("assets/dog" + chosen_dog + ".gif");
   dog = loadImage("assets/dog1.gif");
@@ -150,12 +152,14 @@ function draw() {
     // Show the field success bone
     if (beat_bees) {
       image(bone, 2900, 50, 200, 200);
+      success_count++;
     }
 
     // Show tooltip if Roscoe enters the pond
     if (beat_pond == false) {
       if (dog_x >= 1500 && dog_x <= 2000 && dog_y >= 750 && dog_y <= 1320) {
         document.getElementById("pond-tooltip").style.display = "block";
+        // Make dog_wet appear
       }
     }
 
@@ -168,6 +172,7 @@ function draw() {
     // Show the pond success bone
     if (beat_pond) {
       image(bone, 2900, 300, 200, 200);
+      success_count++;
     }
 
     // Show tooltip if Roscoe enters the doghouse
@@ -186,7 +191,15 @@ function draw() {
     // Show the doghouse success bone
     if (beat_doghouse) {
       image(bone, 2900, 500, 200, 200);
+      success_count++;
     }
+
+    // Show the success gif if they collect all 3 bones
+    if (success_count == 3) {
+      image(success, 1500, 1500, 300, 300);
+    }
+
+    // Play again button? Can use location.reload()
 
     // Display Skeleton
     for (let i = 0; i < skeleton.length; i++) {
