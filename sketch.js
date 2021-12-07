@@ -18,6 +18,10 @@ let bee;
 let bee_x;
 let bee_y;
 
+let enemy_dog;
+let edog_x;
+let edog_y;
+
 let beat_bees = false;
 let active_bees = false;
 let beat_pond = false;
@@ -29,6 +33,7 @@ function preload() {
   // dog = loadImage("assets/dog" + chosen_dog + ".gif");
   dog = loadImage("assets/dog1.gif");
   dog_wet = loadImage("assets/dog_wet.png");
+  enemy_dog = loadImage("assets/enemydog.gif");
   background_img = loadImage('assets/backyard.png');
   bee = loadImage("assets/bees.gif");
   flowers = loadImage("assets/flowers.png");
@@ -97,54 +102,59 @@ function draw() {
   image(doghouse, 2100, -50, 800, 800);
   image(house_bone, 2400, 580, 150, 150);
   image(dog, dog_x, dog_y, 300, 300);
+
   tint(255, 0);
   image(dog_wet, dog_wet_x, dog_wet_y, 300, 300);
   image(bee, bee_x, bee_y, 200, 200);
+  image(enemy_dog, edog_x, edog_y, 300, 300);
   tint(255, 255);
   
   if(pose) {
     
     // Hide game info on left wrist position
-    // if (pose.leftWrist.x >= 1200 && pose.leftWrist.x >= 2000 && 
-    //   pose.leftWrist.y >= 1300 && pose.leftWrist.y >= 1520) {
-    //   var game_info = document.getElementById("game-details");
-    //   game_info.style.display = "none";
-    // }
-
-    if (mouseX >= 1200 && mouseX <= 2000 && 
-      mouseY >= 1300 && mouseY <= 1520) {
-      var game_info = document.getElementById("game-details");
-      game_info.style.display = "none";
+    if (pose.leftWrist.x >= 1200 && pose.leftWrist.x >= 2000 && 
+      pose.leftWrist.y >= 1300 && pose.leftWrist.y >= 1520) {
+        var game_info = document.getElementById("game-details");
+        game_info.style.display = "none";
+        var details_parent = document.getElementById("details-parent");
+        details_parent.style.display = "none";
     }
 
-    // if(pose.rightWrist.x - pose.leftWrist.x <= 10 && pose.rightWrist.y - pose.leftWrist.y <= 10) {
-    //   dog_x = pose.nose.x - 150;
-    //   dog_y = pose.nose.y - 150;
-    //   dog_wet_x = pose.nose.x - 150;
-    //   dog_wet_y = pose.nose.y - 150;
+    // if (mouseX >= 1200 && mouseX <= 2000 && 
+    //   mouseY >= 1300 && mouseY <= 1520) {
+    //     var game_info = document.getElementById("game-details");
+    //     game_info.style.display = "none";
+    //     var details_parent = document.getElementById("details-parent");
+    //     details_parent.style.display = "none";
     // }
 
+    if(pose.rightWrist.x - pose.leftWrist.x <= 10 && pose.rightWrist.y - pose.leftWrist.y <= 10) {
+      dog_x = pose.nose.x - 150;
+      dog_y = pose.nose.y - 150;
+      // dog_wet_x = pose.nose.x - 150;
+      // dog_wet_y = pose.nose.y - 150;
+    }
+
     // testing with mouse
-    dog_x = mouseX - 150;
-    dog_y = mouseY - 150;
-    dog_wet_x = mouseX - 150;
-    dog_wet_y = mouseY - 150;
+    // dog_x = mouseX - 150;
+    // dog_y = mouseY - 150;
+    // dog_wet_x = mouseX - 150;
+    // dog_wet_y = mouseY - 150;
 
     // Show bees if Roscoe enters the flower field
     if (beat_bees == false) {
       if (dog_x >= 200 && dog_x <= 1000 && dog_y >= 300 && dog_y <= 1000) {
         image(bee, bee_x, bee_y, 200, 200);
-        // bee_x = pose.nose.x - 200;
-        // bee_y = pose.nose.y - 150;
-        bee_x = mouseX - 300;
-        bee_y = mouseY - 150;
+        bee_x = pose.nose.x - 300;
+        bee_y = pose.nose.y - 150;
+        // bee_x = mouseX - 300;
+        // bee_y = mouseY - 150;
         document.getElementById("bees-tooltip").style.display = "block";
-        active_bees = true;
       }
     }
 
     // Hide tooltip and set beat_bees to true if Roscoe touches the bone
-    if (dog_x >= 850 && dog_x <= 1000 && dog_y >= 350 && dog_y <= 500) {
+    if (dog_x >= 850 && dog_x <= 1100 && dog_y >= 340 && dog_y <= 520) {
       beat_bees = true;
       document.getElementById("bees-tooltip").style.display = "none";
     }
@@ -159,12 +169,11 @@ function draw() {
     if (beat_pond == false) {
       if (dog_x >= 1500 && dog_x <= 2000 && dog_y >= 750 && dog_y <= 1320) {
         document.getElementById("pond-tooltip").style.display = "block";
-        // Make dog_wet appear
       }
     }
 
     // Hide tooltip and set beat_pond to true if Roscoe touches the bone
-    if (dog_x >= 1700 && dog_x <= 1850 && dog_y >= 1100 && dog_y <= 1250) {
+    if (dog_x >= 2000 && dog_x <= 2200 && dog_y >= 1300 && dog_y <= 1450) {
       beat_pond = true;
       document.getElementById("pond-tooltip").style.display = "none";
     }
@@ -172,18 +181,20 @@ function draw() {
     // Show the pond success bone
     if (beat_pond) {
       image(bone, 2900, 300, 200, 200);
-      success_count++;
     }
 
     // Show tooltip if Roscoe enters the doghouse
     if (beat_doghouse == false) {
       if (dog_x >= 1800 && dog_x <= 2400 && dog_y >= 0 && dog_y <= 500) {
         document.getElementById("house-tooltip").style.display = "block";
+        image(enemy_dog, edog_x, edog_y, 300, 300);
+        edog_x = pose.nose.X - 500;
+        edog_y = pose.nose.Y - 150;
       }
     }
 
     // Hide tooltip and set beat_doghouse to true if Roscoe touches the bone
-    if (dog_x >= 2000 && dog_x <= 2150 && dog_y >= 500 && dog_y <= 600) {
+    if (dog_x >= 2350 && dog_x <= 2500 && dog_y >= 500 && dog_y <= 700) {
       beat_doghouse = true;
       document.getElementById("house-tooltip").style.display = "none";
     }
@@ -195,9 +206,13 @@ function draw() {
     }
 
     // Show the success gif if they collect all 3 bones
-    if (success_count == 3) {
-      image(success, 1500, 1500, 300, 300);
+    if (beat_doghouse && beat_pond && beat_bees) {
+      image(success, 800, 400, 1620, 723);
+      if(pose.rightWrist.x - pose.leftWrist.x <= 10 && pose.rightWrist.y - pose.leftWrist.y <= 10) {
+        location.reload();
+      }
     }
+
 
     // Play again button? Can use location.reload()
 
