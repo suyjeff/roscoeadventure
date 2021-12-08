@@ -208,13 +208,11 @@ function draw() {
     // Show the success gif if they collect all 3 bones
     if (beat_doghouse && beat_pond && beat_bees) {
       image(success, 800, 400, 1620, 723);
+      document.getElementById("playagain-tooltip").style.display = "block";
       if(pose.rightWrist.x - pose.leftWrist.x <= 10 && pose.rightWrist.y - pose.leftWrist.y <= 10) {
         location.reload();
       }
     }
-
-
-    // Play again button? Can use location.reload()
 
     // Display Skeleton
     for (let i = 0; i < skeleton.length; i++) {
