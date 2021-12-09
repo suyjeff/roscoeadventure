@@ -227,12 +227,12 @@ function draw() {
     }
 
     // Display Pose Points
-    for (let i = 0; i < pose.keypoints.length; i++) {
-      let x = pose.keypoints[i].position.x;
-      let y = pose.keypoints[i].position.y;
-      fill(255,255,255);
-      ellipse(x,y,10,10);
-    }
+    // for (let i = 0; i < pose.keypoints.length; i++) {
+    //   let x = pose.keypoints[i].position.x;
+    //   let y = pose.keypoints[i].position.y;
+    //   fill(255,255,255);
+    //   ellipse(x,y,10,10);
+    // }
     
   }
 
