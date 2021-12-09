@@ -102,9 +102,7 @@ function draw() {
   image(doghouse, 2100, -50, 800, 800);
   image(house_bone, 2400, 580, 150, 150);
   image(dog, dog_x, dog_y, 300, 300);
-
   tint(255, 0);
-  image(dog_wet, dog_wet_x, dog_wet_y, 300, 300);
   image(bee, bee_x, bee_y, 200, 200);
   image(enemy_dog, edog_x, edog_y, 300, 300);
   tint(255, 255);
@@ -112,9 +110,16 @@ function draw() {
   if(pose) {
     
     // Hide game info on left wrist position
-    if (pose.leftWrist.x >= 1200 && pose.leftWrist.x >= 2000 && 
-      pose.leftWrist.y >= 1300 && pose.leftWrist.y >= 1520) {
-        var game_info = document.getElementById("game-details");
+    // if (pose.leftWrist.x >= 1200 && pose.leftWrist.x >= 2000 && 
+    //   pose.leftWrist.y >= 1300 && pose.leftWrist.y >= 1520) {
+    //     var game_info = document.getElementById("game-details");
+    //     game_info.style.display = "none";
+    //     var details_parent = document.getElementById("details-parent");
+    //     details_parent.style.display = "none";
+    // }
+
+    if(pose.rightWrist.x - pose.leftWrist.x <= 10 && pose.rightWrist.y - pose.leftWrist.y <= 10) {
+      var game_info = document.getElementById("game-details");
         game_info.style.display = "none";
         var details_parent = document.getElementById("details-parent");
         details_parent.style.display = "none";
@@ -131,8 +136,6 @@ function draw() {
     if(pose.rightWrist.x - pose.leftWrist.x <= 10 && pose.rightWrist.y - pose.leftWrist.y <= 10) {
       dog_x = pose.nose.x - 150;
       dog_y = pose.nose.y - 150;
-      // dog_wet_x = pose.nose.x - 150;
-      // dog_wet_y = pose.nose.y - 150;
     }
 
     // testing with mouse
